@@ -12,11 +12,14 @@ class NewsService {
     private let APIKey = "3719e0706c6741148118532b71fb86dd"
     
     func fetchNews(page: Int, completion: @escaping (Result<[Article], AFError>) -> Void) {
+        
+        let correctPageNumber = apiPage(appPage: page)
+
         let parameters: [String: Any] = [
             "apiKey": APIKey,
             "q": "apple",
             "pageSize": 20,
-            "page": page
+            "page": correctPageNumber
         ]
         
         AF.request(
@@ -34,6 +37,15 @@ class NewsService {
                 completion(.failure(error))
             }
             
+        }
+    }
+    
+    func apiPage(appPage: Int) -> Int {
+        switch appPage {
+        case 2:
+            return 3
+        default:
+            return appPage >= 2 ? appPage + 1 : appPage
         }
     }
     
