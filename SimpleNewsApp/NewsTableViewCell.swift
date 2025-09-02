@@ -15,7 +15,7 @@ class NewsTableViewCell: UITableViewCell {
     private var titleLabel = UILabel()
     private var descriptionLabel = UILabel()
     private var authorLabel = UILabel()
-    private let publishedAtLabel = UILabel()
+    private let dateLabel = UILabel()
     private var articleImageView = UIImageView()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -35,7 +35,7 @@ class NewsTableViewCell: UITableViewCell {
         titleLabel.text = ""
         descriptionLabel.text = ""
         authorLabel.text = ""
-        publishedAtLabel.text = ""
+        dateLabel.text = ""
         articleImageView.image = nil
     }
     
@@ -43,7 +43,7 @@ class NewsTableViewCell: UITableViewCell {
         contentView.addSubview(titleLabel)
         contentView.addSubview(descriptionLabel)
         contentView.addSubview(authorLabel)
-        contentView.addSubview(publishedAtLabel)
+        contentView.addSubview(dateLabel)
         contentView.addSubview(articleImageView)
     }
     
@@ -54,7 +54,7 @@ class NewsTableViewCell: UITableViewCell {
         articleImageView.autoSetDimension(.width, toSize: 80)
         articleImageView.autoSetDimension(.height, toSize: 80)
         articleImageView.autoPinEdge(toSuperviewEdge: .leading, withInset: margin)
-        articleImageView.autoAlignAxis(toSuperviewAxis: .horizontal) 
+        articleImageView.autoAlignAxis(toSuperviewAxis: .horizontal)
 
         titleLabel.autoPinEdge(toSuperviewEdge: .top, withInset: margin)
         titleLabel.autoPinEdge(.leading, to: .trailing, of: articleImageView, withOffset: spacing)
@@ -63,8 +63,8 @@ class NewsTableViewCell: UITableViewCell {
         authorLabel.autoPinEdge(.top, to: .bottom, of: titleLabel, withOffset: spacing)
         authorLabel.autoPinEdge(.leading, to: .trailing, of: articleImageView, withOffset: spacing)
 
-        publishedAtLabel.autoAlignAxis(.horizontal, toSameAxisOf: authorLabel)
-        publishedAtLabel.autoPinEdge(toSuperviewEdge: .trailing, withInset: margin)
+        dateLabel.autoAlignAxis(.horizontal, toSameAxisOf: authorLabel)
+        dateLabel.autoPinEdge(toSuperviewEdge: .trailing, withInset: margin)
 
         descriptionLabel.autoPinEdge(.top, to: .bottom, of: authorLabel, withOffset: spacing)
         descriptionLabel.autoPinEdge(.leading, to: .trailing, of: articleImageView, withOffset: spacing)
@@ -85,8 +85,8 @@ class NewsTableViewCell: UITableViewCell {
         authorLabel.font = .systemFont(ofSize: 14)
         authorLabel.textColor = UIColor(red: 0.8, green: 0.1, blue: 0.1, alpha: 0.7)
         
-        publishedAtLabel.font = .systemFont(ofSize: 12)
-        publishedAtLabel.textColor = UIColor(red: 0.8, green: 0.1, blue: 0.1, alpha: 0.7)
+        dateLabel.font = .systemFont(ofSize: 12)
+        dateLabel.textColor = UIColor(red: 0.8, green: 0.1, blue: 0.1, alpha: 0.7)
         
         descriptionLabel.font = .systemFont(ofSize: 14)
         descriptionLabel.textColor = UIColor.darkGray
@@ -109,7 +109,7 @@ class NewsTableViewCell: UITableViewCell {
         formatter.dateStyle = .medium
         formatter.timeStyle = .short
         formatter.locale = Locale(identifier: "en_US_POSIX")
-        publishedAtLabel.text = formatter.string(from: article.publishedAt)
+        dateLabel.text = formatter.string(from: article.publishedAt)
         
         if let url = URL(string: article.urlToImage) {
             articleImageView.kf.setImage(with: url, placeholder: UIImage(systemName: "photo"))

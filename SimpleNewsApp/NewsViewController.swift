@@ -11,6 +11,10 @@ import Kingfisher
 
 class NewsViewController: UIViewController {
     private let newsTableView = UITableView()
+    private let refreshControl = UIRefreshControl()
+    
+    private var isFetching = false
+    private var currentPage = 1
     private let service = NewsService()
     private var news: [Article] = []
     
@@ -26,35 +30,56 @@ class NewsViewController: UIViewController {
         newsTableView.reloadData()
     }
     
+    @objc private func refreshArticles() {
+        currentPage = 1
+        news.removeAll()
+        newsTableView.reloadData()
+        fetchNews()
+    }
+    
     private func setupTableView() {
         view.addSubview(newsTableView)
         
         newsTableView.delegate = self
         newsTableView.dataSource = self
         newsTableView.register(NewsTableViewCell.self, forCellReuseIdentifier: NewsTableViewCell.identifier)
+        newsTableView.refreshControl = refreshControl
+        
+        refreshControl.addTarget(self, action: #selector(refreshArticles), for: .valueChanged)
         
         newsTableView.autoPinEdgesToSuperviewSafeArea()
     }
     
     private func fetchNews() {
-        service.fetchNews(page: 1) { [weak self] result in
+        guard !isFetching else { return }
+        isFetching = true
+        
+        service.fetchNews(page: currentPage) { [weak self] result in
             guard let self = self else { return }
-            
+            self.refreshControl.endRefreshing()
+            self.isFetching = false
             switch result {
             case .success(let news):
-                self.news = news
-                DispatchQueue.main.async {
-                    self.newsTableView.reloadData()
-                }
+                handleSuccesCase(news: news)
             case .failure(let error):
-                DispatchQueue.main.async {
-                    self.showErrorAlert(message: error.localizedDescription)
-                }
+                handleErrorCase(message: error.localizedDescription)
             }
         }
     }
     
-    private func showErrorAlert(message: String) {
+    private func handleSuccesCase(news: [Article]) {
+        if news.isEmpty {
+            return
+        }
+        
+        self.news.append(contentsOf: news)
+        DispatchQueue.main.async {
+            self.newsTableView.reloadData()
+        }
+        self.currentPage += 1
+    }
+    
+    private func handleErrorCase(message: String) {
         let alert = UIAlertController(title: "Ups, something went wrong!", message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default))
         present(alert, animated: true)
@@ -86,4 +111,17 @@ extension NewsViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
 }
+
+//extension NewsViewController {
+//    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+//        let offsetY = scrollView.contentOffset.y
+//        let contentHeight = scrollView.contentSize.height
+//        let height = scrollView.frame.size.height
+//        
+//        if offsetY > contentHeight - height - 100 {
+//            fetchNews()
+//        }
+//    }
+//    
+//}
 

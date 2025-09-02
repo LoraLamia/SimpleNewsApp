@@ -7,14 +7,14 @@
 
 import UIKit
 import PureLayout
+import Kingfisher
 
 class ArticleDetailsViewController: UIViewController {
-    
     private var article: Article
     
     private let scrollView = UIScrollView()
     private let contentView = UIView()
-    
+    private let articleImageView = UIImageView()
     private let titleLabel = UILabel()
     private let authorLabel = UILabel()
     private let dateLabel = UILabel()
@@ -44,6 +44,7 @@ class ArticleDetailsViewController: UIViewController {
         scrollView.addSubview(contentView)
         contentView.autoMatch(.width, to: .width, of: scrollView)
         
+        contentView.addSubview(articleImageView)
         contentView.addSubview(titleLabel)
         contentView.addSubview(authorLabel)
         contentView.addSubview(dateLabel)
@@ -59,7 +60,12 @@ class ArticleDetailsViewController: UIViewController {
         let margin: CGFloat = 16
         let spacing: CGFloat = 12
         
-        titleLabel.autoPinEdge(toSuperviewEdge: .top, withInset: margin)
+        articleImageView.autoPinEdge(toSuperviewEdge: .top, withInset: margin)
+        articleImageView.autoPinEdge(toSuperviewEdge: .leading, withInset: margin)
+        articleImageView.autoPinEdge(toSuperviewEdge: .trailing, withInset: margin)
+        articleImageView.autoSetDimension(.height, toSize: 400)
+        
+        titleLabel.autoPinEdge(.top, to: .bottom, of: articleImageView, withOffset: spacing)
         titleLabel.autoPinEdge(toSuperviewEdge: .leading, withInset: margin)
         titleLabel.autoPinEdge(toSuperviewEdge: .trailing, withInset: margin)
         
@@ -109,15 +115,28 @@ class ArticleDetailsViewController: UIViewController {
         urlLabel.font = .systemFont(ofSize: 16)
         urlLabel.textColor = .darkGray
         urlLabel.numberOfLines = 0
+        
+        articleImageView.contentMode = .scaleAspectFill
+        articleImageView.clipsToBounds = true
     }
     
     private func configure() {
         titleLabel.text = article.title
         authorLabel.text = article.author
-        dateLabel.text = article.publishedAt.formatted()
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .short
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        dateLabel.text = formatter.string(from: article.publishedAt)
         descriptionLabel.text = article.description
         contentLabel.text = article.content.simpleHTMLCleaned
-        urlLabel.text = article.url
+        urlLabel.text = "Resource: \(article.url)"
+        
+        if let url = URL(string: article.urlToImage) {
+            articleImageView.kf.setImage(with: url, placeholder: UIImage(systemName: "photo"))
+        } else {
+            articleImageView.image = UIImage(systemName: "photo")
+        }
     }
     
 }
