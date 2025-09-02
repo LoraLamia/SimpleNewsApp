@@ -50,30 +50,27 @@ class NewsTableViewCell: UITableViewCell {
     private func setupConstraints() {
         let margin: CGFloat = 12
         let spacing: CGFloat = 6
-
+        
         articleImageView.autoSetDimension(.width, toSize: 80)
         articleImageView.autoSetDimension(.height, toSize: 80)
         articleImageView.autoPinEdge(toSuperviewEdge: .leading, withInset: margin)
         articleImageView.autoAlignAxis(toSuperviewAxis: .horizontal)
-
+        
         titleLabel.autoPinEdge(toSuperviewEdge: .top, withInset: margin)
         titleLabel.autoPinEdge(.leading, to: .trailing, of: articleImageView, withOffset: spacing)
         titleLabel.autoPinEdge(toSuperviewEdge: .trailing, withInset: margin)
-
+        
         authorLabel.autoPinEdge(.top, to: .bottom, of: titleLabel, withOffset: spacing)
         authorLabel.autoPinEdge(.leading, to: .trailing, of: articleImageView, withOffset: spacing)
-
+        
         dateLabel.autoAlignAxis(.horizontal, toSameAxisOf: authorLabel)
         dateLabel.autoPinEdge(toSuperviewEdge: .trailing, withInset: margin)
-
+        
         descriptionLabel.autoPinEdge(.top, to: .bottom, of: authorLabel, withOffset: spacing)
         descriptionLabel.autoPinEdge(.leading, to: .trailing, of: articleImageView, withOffset: spacing)
         descriptionLabel.autoPinEdge(toSuperviewEdge: .trailing, withInset: margin)
         descriptionLabel.autoPinEdge(toSuperviewEdge: .bottom, withInset: margin)
     }
-
-
-    
     
     private func styleViews() {
         contentView.backgroundColor = UIColor(red: 1, green: 0.95, blue: 0.95, alpha: 0.8)
