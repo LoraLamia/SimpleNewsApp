@@ -148,5 +148,3 @@ extension String {
         return cleaned.trimmingCharacters(in: .whitespacesAndNewlines)
     }
 }
-
-

@@ -12,11 +12,11 @@ import Kingfisher
 class NewsTableViewCell: UITableViewCell {
     static let identifier = "NewsTableViewCell"
     
-    private var titleLabel = UILabel()
-    private var descriptionLabel = UILabel()
-    private var authorLabel = UILabel()
+    private let titleLabel = UILabel()
+    private let descriptionLabel = UILabel()
+    private let authorLabel = UILabel()
     private let dateLabel = UILabel()
-    private var articleImageView = UIImageView()
+    private let articleImageView = UIImageView()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)

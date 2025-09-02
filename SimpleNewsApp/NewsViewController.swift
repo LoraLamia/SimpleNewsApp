@@ -20,16 +20,13 @@ class NewsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        addSubviews()
+        setupConstraints()
+        styleViews()
         setupTableView()
         fetchNews()
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        newsTableView.reloadData()
-    }
-    
+        
     @objc private func refreshArticles() {
         currentPage = 1
         news.removeAll()
@@ -37,17 +34,24 @@ class NewsViewController: UIViewController {
         fetchNews()
     }
     
-    private func setupTableView() {
+    private func addSubviews() {
         view.addSubview(newsTableView)
-        
+    }
+    
+    private func setupConstraints() {
+        newsTableView.autoPinEdgesToSuperviewSafeArea()
+    }
+    
+    private func styleViews() {
+        view.backgroundColor = .white
+    }
+    
+    private func setupTableView() {
         newsTableView.delegate = self
         newsTableView.dataSource = self
         newsTableView.register(NewsTableViewCell.self, forCellReuseIdentifier: NewsTableViewCell.identifier)
         newsTableView.refreshControl = refreshControl
-        
         refreshControl.addTarget(self, action: #selector(refreshArticles), for: .valueChanged)
-        
-        newsTableView.autoPinEdgesToSuperviewSafeArea()
     }
     
     private func fetchNews() {
@@ -84,7 +88,6 @@ class NewsViewController: UIViewController {
         alert.addAction(UIAlertAction(title: "OK", style: .default))
         present(alert, animated: true)
     }
-    
     
 }
 
@@ -124,4 +127,3 @@ extension NewsViewController {
     }
     
 }
-

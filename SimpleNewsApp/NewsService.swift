@@ -22,13 +22,16 @@ class NewsService {
             "page": correctPageNumber
         ]
         
+        let jsonDecoder = JSONDecoder()
+        jsonDecoder.dateDecodingStrategy = .iso8601
+        
         AF.request(
             "https://newsapi.org/v2/everything",
             method: .get,
             parameters: parameters
         )
         .validate()
-        .responseDecodable(of: NewsResponse.self) { response in
+        .responseDecodable(of: NewsResponse.self, decoder: jsonDecoder) { response in
             switch response.result {
             case .success(let newsResponse):
                 let news = newsResponse.articles

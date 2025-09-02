@@ -25,6 +25,7 @@ class ArticleParsingTests: XCTestCase {
         """.data(using: .utf8)!
 
         let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
 
         do {
             let article = try decoder.decode(Article.self, from: json)
