@@ -46,9 +46,17 @@ class NewsViewController: UIViewController {
                     self.newsTableView.reloadData()
                 }
             case .failure(let error):
-                print(error)
+                DispatchQueue.main.async {
+                    self.showErrorAlert(message: error.localizedDescription)
+                }
             }
         }
+    }
+    
+    private func showErrorAlert(message: String) {
+        let alert = UIAlertController(title: "Ups, something went wrong!", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        present(alert, animated: true)
     }
     
     
@@ -75,6 +83,6 @@ extension NewsViewController: UITableViewDataSource, UITableViewDelegate {
         let articleDetailsViewController = ArticleDetailsViewController(article: article)
         navigationController?.pushViewController(articleDetailsViewController, animated: true)
     }
-
+    
 }
 
