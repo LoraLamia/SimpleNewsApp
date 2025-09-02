@@ -11,6 +11,8 @@ import PureLayout
 class NewsViewController: UIViewController {
     private let newsTableView = UITableView()
     private let mockData = ["news1", "news2", "news3", "news4", "news5", "news6", "news7", "news8", "news9", "news10"]
+    private let service = NewsService()
+    private var news: [Article] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -18,6 +20,12 @@ class NewsViewController: UIViewController {
         addSubviews()
         setupTableView()
         editViews()
+        fetchNews()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        newsTableView.reloadData()
     }
     
     private func setupTableView() {
@@ -38,20 +46,36 @@ class NewsViewController: UIViewController {
         
     }
     
+    private func fetchNews() {
+        service.fetchNews(page: 1) { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let articles):
+                self.news = articles
+                DispatchQueue.main.async {
+                    self.newsTableView.reloadData()
+                }
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
+    
     
 }
 
 extension NewsViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        mockData.count
+        news.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let new = mockData[indexPath.row]
+        let new = news[indexPath.row]
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "NewsTableViewCell", for: indexPath) as? NewsTableViewCell else {
             return UITableViewCell()
         }
-        cell.configure(title: new)
+        cell.configure(article: new)
         return cell
     }
 }

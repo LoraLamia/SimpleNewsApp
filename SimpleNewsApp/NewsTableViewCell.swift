@@ -29,17 +29,24 @@ class NewsTableViewCell: UITableViewCell {
     
     private func addSubviews() {
         contentView.addSubview(titleLabel)
+        contentView.addSubview(descriptionLabel)
 //        contentView.addSubview(descriptionLabel)
     }
     
     private func setupConstraints() {
-//        titleLabel.autoPinEdge(toSuperviewMargin: .top, withInset: 8)
-//        titleLabel.autoPinEdge(toSuperviewMargin: .leading, withInset: 8)
-        titleLabel.autoCenterInSuperview()
+        titleLabel.autoPinEdge(toSuperviewMargin: .top, withInset: 8)
+        titleLabel.autoPinEdge(toSuperviewMargin: .leading, withInset: 8)
+        descriptionLabel.autoPinEdge(.top, to: .bottom, of: titleLabel, withOffset: 8)
+        descriptionLabel.autoPinEdge(.leading, to: .leading, of: titleLabel)
+        descriptionLabel.autoPinEdge(toSuperviewEdge: .trailing, withInset: 8)
+        descriptionLabel.autoPinEdge(toSuperviewEdge: .bottom)
+        
+        descriptionLabel.numberOfLines = 0
     }
     
-    func configure(title: String) {
-        titleLabel.text = title
+    func configure(article: Article) {
+        titleLabel.text = article.title
+        descriptionLabel.text = article.description
     }
 
 }
