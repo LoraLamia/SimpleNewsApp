@@ -15,6 +15,7 @@ class NewsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .white
         setupTableView()
         fetchNews()
     }
@@ -66,5 +67,14 @@ extension NewsViewController: UITableViewDataSource, UITableViewDelegate {
         cell.configure(article: article)
         return cell
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+        let article = news[indexPath.row]
+        let articleDetailsViewController = ArticleDetailsViewController(article: article)
+        navigationController?.pushViewController(articleDetailsViewController, animated: true)
+    }
+
 }
 
