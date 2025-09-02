@@ -7,6 +7,7 @@
 
 import UIKit
 import PureLayout
+import Kingfisher
 
 class NewsViewController: UIViewController {
     private let newsTableView = UITableView()
@@ -30,7 +31,7 @@ class NewsViewController: UIViewController {
         
         newsTableView.delegate = self
         newsTableView.dataSource = self
-        newsTableView.register(NewsTableViewCell.self, forCellReuseIdentifier: "NewsTableViewCell")
+        newsTableView.register(NewsTableViewCell.self, forCellReuseIdentifier: NewsTableViewCell.identifier)
         
         newsTableView.autoPinEdgesToSuperviewSafeArea()
     }
@@ -69,7 +70,7 @@ extension NewsViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let article = news[indexPath.row]
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "NewsTableViewCell", for: indexPath) as? NewsTableViewCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: NewsTableViewCell.identifier, for: indexPath) as? NewsTableViewCell else {
             return UITableViewCell()
         }
         cell.configure(article: article)
