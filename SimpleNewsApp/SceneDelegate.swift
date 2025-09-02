@@ -17,6 +17,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         let vc = NewsViewController()
         let nvc = UINavigationController(rootViewController: vc)
+        vc.title = "News"
         let window: UIWindow = .init(windowScene: windowScene)
         window.rootViewController = nvc
         self.window = window
